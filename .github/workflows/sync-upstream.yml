@@ -1,0 +1,17 @@
+# Keeps this fork on fayazara/coworkers. A push to main triggers the
+# Cloudflare build, so new upstream versions deploy by themselves.
+name: Sync upstream
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST repos/${{ github.repository }}/merge-upstream -f branch=main

@@ -19,11 +19,16 @@ const deploy: Partial<{
   accessAud: string
   emailDomain: string
   emailZoneId: string
+  domain: string
 }> =
   // The installer packs a release for everyone: never with your values.
   !process.env.COWORKERS_PACKING && DEPLOY_FILE
     ? JSON.parse(readFileSync(DEPLOY_FILE, "utf8"))
-    : {}
+    : // Git-connected builds (Workers Builds) have no deploy file: put the same
+      // JSON in a build variable named COWORKERS_DEPLOY.
+      !process.env.COWORKERS_PACKING && process.env.COWORKERS_DEPLOY
+      ? JSON.parse(process.env.COWORKERS_DEPLOY)
+      : {}
 
 const WORKER_NAME = deploy.name ?? "coworkers"
 
@@ -55,6 +60,8 @@ export default defineConfig({
     },
     // Per-version preview hostnames are not covered by the Access app.
     previewUrls: false,
+    // Custom domain, e.g. "coworkers.example.com" (deploy file: "domain").
+    domains: deploy.domain ? [deploy.domain] : [],
     exports: {
       // One per user: bot directory, connections, cross-bot routing.
       UserHub: exports.durableObject({ storage: "sqlite" }),
