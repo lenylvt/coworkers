@@ -1,8 +1,0 @@
-{
-  "model": "anthropic/claude-haiku-5.5",
-  "gateway": "coworkers",
-  "accessTeamDomain": "lleny.cloudflareaccess.com",
-  "accessAud": "e66b507c12432e1573f810adf05a998ae9b892815d4eb660b693f83c7721454b",
-  "emailDomain": "lenylvt.cc",
-  "domain": "coworkers.lenylvt.cc"
-}
